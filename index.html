@@ -907,6 +907,7 @@
 
     let categoriaActual = null;
     let folioActual = "";
+    let fechaHoraConsulta = null;
 
     // =========================================================
     // 6. CONTROL DE PANTALLAS
@@ -953,6 +954,7 @@
     function volverInicio() {
       categoriaActual = null;
       folioActual = "";
+      fechaHoraConsulta = null;
       mostrarPantalla("screen-home");
     }
 
@@ -986,6 +988,9 @@
       }
 
       folioActual = folio;
+
+      // Registrar la fecha y hora exactas en que se inicia la consulta.
+      fechaHoraConsulta = new Date();
 
       // La pantalla de captura desaparece durante la validación.
       mostrarPantalla("screen-validation");
@@ -1024,6 +1029,28 @@
 
       contenido.replaceChildren();
 
+      // Mostrar estos datos en todos los resultados, incluso si el folio no existe.
+      agregarCampo(contenido, "Folio de registro", folio);
+      agregarCampo(contenido, "Categoría", nombreCategoria(categoriaActual));
+
+      const fechaConsulta = fechaHoraConsulta || new Date();
+
+      const fechaFormateada = fechaConsulta.toLocaleString("es-MX", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true
+      });
+
+      agregarCampo(
+        contenido,
+        "Fecha y hora de consulta",
+        fechaFormateada,
+        true
+      );
+
       if (!registro) {
         icono.textContent = "!";
         icono.classList.add("invalid");
@@ -1055,9 +1082,6 @@
 
       estado.textContent = "Coincidencia encontrada";
       estado.classList.remove("invalid");
-
-      agregarCampo(contenido, "Folio de registro", folio);
-      agregarCampo(contenido, "Categoría", nombreCategoria(categoriaActual));
 
       if (categoriaActual === "empresas") {
         renderizarEmpresa(contenido, registro);
@@ -1162,6 +1186,11 @@
       agregarCampo(contenedor, "Duración", registro.duracion);
 
       agregarLista(contenedor, "Programas asociados", registro.programas);
+
+      agregarObservacion(
+        contenedor,
+        "Registro correspondiente a la participación del ponente en los programas de capacitación orientados al desarrollo de habilidades blandas y al fortalecimiento de las competencias profesionales de los colaboradores."
+      );
     }
 
     function renderizarParticipante(contenedor, registro) {
@@ -1171,6 +1200,11 @@
       agregarCampo(contenedor, "Curso registrado", registro.curso);
       agregarCampo(contenedor, "Periodo", registro.periodo);
       agregarCampo(contenedor, "Estatus", registro.estatus);
+
+      agregarObservacion(
+        contenedor,
+        "Registro correspondiente a la participación en los programas de capacitación orientados al desarrollo de habilidades blandas, fortaleciendo los conocimientos y competencias para el desempeño laboral."
+      );
     }
   </script>
 </body>
