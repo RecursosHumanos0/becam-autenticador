@@ -1,69 +1,567 @@
-
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Corporativo Becam | Sistema Institucional de Autenticación de Certificados</title>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sistema Institucional de Certificados</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <style>
-body{font-family:Inter,sans-serif;background:#f5f6f8;margin:0;color:#222}
-header{background:#c8102e;color:#fff;padding:24px;text-align:center}
-.container{max-width:900px;margin:30px auto;background:#fff;padding:30px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
-input{width:100%;padding:12px;border:1px solid #bbb;border-radius:6px;font-size:16px}
-button{margin-top:15px;background:#c8102e;color:#fff;border:0;padding:12px 24px;border-radius:6px;font-size:16px;cursor:pointer}
-button:hover{background:#a30d24}
-#loader{display:none;text-align:center;padding:20px}
-.card{display:none;border-left:5px solid #28a745;background:#fafafa;padding:20px;margin-top:20px}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-td,th{border:1px solid #ddd;padding:8px}
-th{background:#eee}
-footer{text-align:center;color:#666;padding:20px}
-.ok{color:#28a745;font-weight:700}
-.err{color:#c8102e;font-weight:700}
-</style></head><body>
-<header><h1>Corporativo Becam</h1><h2>Sistema Institucional de Autenticación de Certificados</h2>
-<p>Verifique la autenticidad de los certificados emitidos por Corporativo Becam.</p></header>
-<div class="container">
-<label><b>Ingrese el folio del certificado</b></label>
-<input id="folio" placeholder="AAA-AAA-000">
-<button onclick="validar()">Validar certificado</button>
-<div id="loader">Validando certificado...</div>
-<div id="resultado" class="card"></div>
-</div><footer>© 2026 Corporativo Becam | Sistema Institucional de Autenticación de Certificados</footer>
+:root {
+  --rojo: #c8102e;
+  --rojo-oscuro: #a30d24;
+  --fondo: #f5f6f8;
+  --texto: #222;
+  --verde: #218838;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: Inter, sans-serif;
+  background: var(--fondo);
+  margin: 0;
+  color: var(--texto);
+}
+
+header {
+  background: var(--rojo);
+  color: white;
+  padding: 28px 18px;
+  text-align: center;
+}
+
+header h1 { margin: 0 0 8px; }
+header h2 { font-size: 20px; margin: 0; }
+header p { margin-bottom: 0; line-height: 1.6; }
+
+main {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 18px;
+}
+
+.intro {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.intro p {
+  color: #666;
+  line-height: 1.6;
+}
+
+.ventanas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.ventana {
+  background: white;
+  padding: 22px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  min-width: 0;
+}
+
+.icono {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.ventana h2 {
+  color: var(--rojo);
+  font-size: 21px;
+  margin: 0 0 8px;
+}
+
+.descripcion {
+  color: #666;
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 62px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 18px 0 8px;
+}
+
+input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 12px 10px;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+input::placeholder {
+  color: #a0a0a0;
+  opacity: 1;
+}
+
+input:focus {
+  outline: 2px solid #c8102e30;
+  border-color: var(--rojo);
+}
+
+button {
+  width: 100%;
+  margin-top: 12px;
+  background: var(--rojo);
+  color: white;
+  border: 0;
+  padding: 12px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover { background: var(--rojo-oscuro); }
+
+.loader {
+  display: none;
+  text-align: center;
+  padding: 18px 5px;
+  color: #666;
+  font-size: 13px;
+}
+
+.resultado {
+  display: none;
+  background: #fafafa;
+  border-left: 4px solid var(--verde);
+  padding: 16px;
+  margin-top: 20px;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.resultado.error { border-left-color: var(--rojo); }
+
+.resultado h3 {
+  font-size: 16px;
+  margin: 16px 0 8px;
+}
+
+.resultado h4 {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.ok { color: var(--verde); }
+.err { color: var(--rojo); }
+
+.lista {
+  padding-left: 20px;
+  margin: 8px 0 14px;
+}
+
+.lista li { margin-bottom: 5px; }
+
+.tabla-contenedor {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+td, th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: #eee;
+}
+
+.nota {
+  color: #666;
+  font-size: 12px;
+}
+
+footer {
+  text-align: center;
+  color: #666;
+  padding: 25px 15px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+@media (max-width: 850px) {
+  .ventanas { grid-template-columns: 1fr; }
+  .descripcion { min-height: auto; }
+  .ventana { padding: 22px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Corporativo Becam</h1>
+  <h2>Sistema Institucional de Autenticación de Certificados</h2>
+  <p>Portal de consulta y validación institucional de certificados.</p>
+</header>
+
+<main>
+  <section class="intro">
+    <h2>Consulta de certificados</h2>
+    <p>Selecciona la categoría correspondiente e ingresa el folio que aparece en tu documento.</p>
+  </section>
+
+  <section class="ventanas">
+
+    <!-- VENTANA 1: EMPRESAS -->
+    <article class="ventana">
+      <div class="icono" aria-hidden="true">🏢</div>
+      <h2>Empresas</h2>
+      <p class="descripcion">
+        Consulta la validación institucional de programas de capacitación empresarial.
+      </p>
+
+      <form onsubmit="consultar(event, 'empresas')">
+        <label for="folio-empresas">Folio de empresa</label>
+        <input id="folio-empresas"
+          placeholder="AAA-AAA-000"
+          autocomplete="off"
+          required>
+        <button type="submit">Consultar certificado</button>
+      </form>
+
+      <div id="loader-empresas" class="loader" role="status">
+        Validando certificado...
+      </div>
+      <div id="resultado-empresas" class="resultado" aria-live="polite"></div>
+    </article>
+
+    <!-- VENTANA 2: PONENTES -->
+    <article class="ventana">
+      <div class="icono" aria-hidden="true">🎓</div>
+      <h2>Ponentes</h2>
+      <p class="descripcion">
+        Verifica el registro institucional de los instructores y ponentes.
+      </p>
+
+      <form onsubmit="consultar(event, 'ponentes')">
+        <label for="folio-ponentes">Folio de ponente</label>
+        <input id="folio-ponentes"
+          placeholder="AAA-AAA-000"
+          autocomplete="off"
+          required>
+        <button type="submit">Consultar certificado</button>
+      </form>
+
+      <div id="loader-ponentes" class="loader" role="status">
+        Validando certificado...
+      </div>
+      <div id="resultado-ponentes" class="resultado" aria-live="polite"></div>
+    </article>
+
+    <!-- VENTANA 3: PARTICIPANTES -->
+    <article class="ventana">
+      <div class="icono" aria-hidden="true">👥</div>
+      <h2>Participantes</h2>
+      <p class="descripcion">
+        Consulta las constancias individuales de participación en los programas de capacitación.
+      </p>
+
+      <form onsubmit="consultar(event, 'participantes')">
+        <label for="folio-participantes">Folio de participante</label>
+        <input id="folio-participantes"
+          placeholder="AAA-AAA-000"
+          autocomplete="off"
+          required>
+        <button type="submit">Consultar certificado</button>
+      </form>
+
+      <div id="loader-participantes" class="loader" role="status">
+        Validando certificado...
+      </div>
+      <div id="resultado-participantes" class="resultado" aria-live="polite"></div>
+    </article>
+
+  </section>
+</main>
+
+<footer>
+  ©️ 2026 Corporativo Becam<br>
+  Sistema Institucional de Autenticación de Certificados
+</footer>
+
 <script>
-const db={
-"CAP-HAB-001":{n:"PSIC. Nancy Silvana Zavala Velazco",c:"Pirma CEDIS",p:20},
-"CAP-HAB-002":{n:"Lic. Karla Lisset Rubio Hernández",c:"Pirma – Sucursales Locales (Puebla)",p:40},
-"CAP-HAB-003":{n:"Lic. José Manuel Rodríguez Gaona",c:"Pirma – Sucursales Locales (Puebla)",p:40}
+/*
+ * REGISTRO INSTITUCIONAL
+ * Los datos de ejemplo se almacenan en este objeto.
+ * Los folios son únicos dentro de cada categoría.
+ */
+
+const programasDocuPuebla = [
+  "Comunicación asertiva",
+  "Trabajo en equipo",
+  "Liderazgo transformacional",
+  "Gestión del tiempo",
+  "Manejo de conflictos",
+  "Orientación a resultados"
+];
+
+const instructoresDocuPuebla = [
+  "Lic. José Rodríguez",
+  "Lic. Karla Rubio"
+];
+
+/* Registro de EMPRESAS */
+const empresas = {
+  "CAP-DOCU-001": {
+    empresaEmisora: "Corporativo Becam",
+    empresaBeneficiaria: "DocuPuebla S.A. de C.V.",
+    centro: "CEDIS-Reforma Puebla",
+    instructores: instructoresDocuPuebla,
+    programas: programasDocuPuebla,
+    periodo: "Octubre – noviembre de 2026",
+    duracion: "2 meses",
+    promedio: "10 colaboradores por curso impartido",
+    participantes: [
+      "José",
+      "Monse",
+      "Karla",
+      "Nancy",
+      "Antonio"
+    ],
+    observaciones:
+      "Registro correspondiente al cumplimiento del calendario de capacitaciones en habilidades blandas, orientado al desarrollo de los colaboradores."
+  }
 };
-function validar(){
-let f=document.getElementById('folio').value.trim().toUpperCase();
-let r=document.getElementById('resultado');
-r.style.display='none';
-loader.style.display='block';
-setTimeout(()=>{
-loader.style.display='none';
-if(!db[f]){
-r.innerHTML="<h2 class='err'>Folio no encontrado</h2><p>El folio consultado no se encuentra registrado en la base de datos institucional de Corporativo Becam.</p>";
-r.style.display='block';return;}
-let d=db[f],fecha=new Date().toLocaleString("es-MX");
-r.innerHTML=`<h2 class='ok'>CERTIFICADO VÁLIDO</h2>
-<p>El folio consultado se encuentra registrado en la base de datos institucional de Corporativo Becam.</p>
-<h3>Información del certificado</h3>
-<p><b>Folio:</b> ${f}<br><b>Instructor:</b> ${d.n}<br>
-<b>Empresa beneficiaria:</b> Pirma<br><b>Centro de aplicación:</b> ${d.c}<br>
-<b>Programa:</b> Trabajo en equipo, Liderazgo, Comunicación asertiva, Gestión del tiempo, Protocolo de servicio, Gestión Emocional, Alineación práctica a la NMX-R-025-SCFI-2015 en Igualdad Laboral y No Discriminación, Manejo de conflictos y Orientación a resultados.<br>
-<b>Periodo:</b> Agosto – Septiembre de 2026<br>
-<b>Duración:</b> 2 meses<br>
-<b>Participantes promedio:</b> ${d.p} colaboradores por curso.</p>
-<h3>Resultado de la validación institucional</h3>
-<table><tr><th>Concepto</th><th>Resultado</th></tr>
-<tr><td>Estado del certificado</td><td>Válido</td></tr>
-<tr><td>Registro institucional</td><td>Encontrado</td></tr>
-<tr><td>Integridad del documento</td><td>Verificada</td></tr>
-<tr><td>Organismo emisor</td><td>Corporativo Becam</td></tr>
-<tr><td>Estatus</td><td>Vigente</td></tr>
-<tr><td>Fecha y hora de consulta</td><td>${fecha}</td></tr>
-<tr><td>Código de validación</td><td>${f}</td></tr></table>
-<p><b>Observaciones institucionales</b><br>El certificado consultado fue emitido por Corporativo Becam y forma parte del registro institucional de constancias de capacitación.</p>`;
-r.style.display='block';
-},1200)}
-</script></body></html>
+
+/* Registro de PONENTES */
+const ponentes = {
+  "CAP-HAB-001": {
+    nombre: "Lic. Karla Lisset Rubio Hernández",
+    empresa: "DocuPuebla S.A. de C.V.",
+    centro: "CEDIS-Reforma Puebla",
+    programas: programasDocuPuebla,
+    periodo: "Octubre – noviembre de 2026",
+    duracion: "2 meses"
+  },
+
+  "CAP-HAB-002": {
+    nombre: "Lic. José Manuel Rodríguez Gaona",
+    empresa: "DocuPuebla S.A. de C.V.",
+    centro: "CEDIS-Reforma Puebla",
+    programas: programasDocuPuebla,
+    periodo: "Octubre – noviembre de 2026",
+    duracion: "2 meses"
+  }
+};
+
+/*
+ * PARTICIPANTES
+ * Aún no se asignan folios individuales.
+ * Agrega cada registro cuando se definan sus folios.
+ */
+const participantes = {};
+
+
+/* Funciones para construir resultados de manera segura */
+
+function crearElemento(etiqueta, texto, clase) {
+  const elemento = document.createElement(etiqueta);
+  if (texto !== undefined) elemento.textContent = texto;
+  if (clase) elemento.className = clase;
+  return elemento;
+}
+
+function agregarTexto(contenedor, etiqueta, valor) {
+  const p = document.createElement("p");
+  const strong = crearElemento("strong", etiqueta + ": ");
+  p.append(strong, document.createTextNode(valor));
+  contenedor.appendChild(p);
+}
+
+function agregarLista(contenedor, titulo, elementos) {
+  contenedor.appendChild(crearElemento("h4", titulo));
+  const ul = crearElemento("ul", undefined, "lista");
+
+  elementos.forEach(texto => {
+    ul.appendChild(crearElemento("li", texto));
+  });
+
+  contenedor.appendChild(ul);
+}
+
+function agregarTabla(contenedor, filas) {
+  contenedor.appendChild(crearElemento("h3", "Resultado de la validación institucional"));
+
+  const wrapper = crearElemento("div", undefined, "tabla-contenedor");
+  const tabla = document.createElement("table");
+  const thead = document.createElement("thead");
+  const encabezado = document.createElement("tr");
+
+  ["Concepto", "Resultado"].forEach(texto => {
+    encabezado.appendChild(crearElemento("th", texto));
+  });
+
+  thead.appendChild(encabezado);
+  tabla.appendChild(thead);
+
+  const tbody = document.createElement("tbody");
+
+  filas.forEach(([concepto, valor]) => {
+    const tr = document.createElement("tr");
+    tr.appendChild(crearElemento("td", concepto));
+    tr.appendChild(crearElemento("td", valor));
+    tbody.appendChild(tr);
+  });
+
+  tabla.appendChild(tbody);
+  wrapper.appendChild(tabla);
+  contenedor.appendChild(wrapper);
+}
+
+function mostrarNoEncontrado(resultado, folio, categoria) {
+  resultado.replaceChildren();
+  resultado.classList.add("error");
+
+  resultado.appendChild(
+    crearElemento("h3", "Folio no encontrado", "err")
+  );
+
+  resultado.appendChild(
+    crearElemento(
+      "p",
+      "El folio " + folio +
+      " no está registrado en la categoría " + categoria +
+      " de esta base de datos institucional."
+    )
+  );
+
+  resultado.style.display = "block";
+}
+
+function mostrarResultado(resultado, folio, categoria, datos) {
+  resultado.replaceChildren();
+  resultado.classList.remove("error");
+
+  resultado.appendChild(
+    crearElemento("h3", "CERTIFICADO VÁLIDO", "ok")
+  );
+
+  resultado.appendChild(
+    crearElemento(
+      "p",
+      "El folio consultado se encuentra registrado en la categoría " +
+      categoria + " de la base de datos institucional."
+    )
+  );
+
+  resultado.appendChild(crearElemento("h3", "Información del certificado"));
+
+  agregarTexto(resultado, "Folio", folio);
+
+  if (categoria === "Empresas") {
+    agregarTexto(resultado, "Empresa emisora", datos.empresaEmisora);
+    agregarTexto(resultado, "Empresa beneficiaria", datos.empresaBeneficiaria);
+    agregarTexto(resultado, "Centro de aplicación", datos.centro);
+    agregarLista(resultado, "Instructores", datos.instructores);
+    agregarLista(resultado, "Programas de capacitación", datos.programas);
+    agregarTexto(resultado, "Periodo", datos.periodo);
+    agregarTexto(resultado, "Duración", datos.duracion);
+    agregarTexto(resultado, "Participantes promedio", datos.promedio);
+    agregarLista(resultado, "Participantes registrados", datos.participantes);
+    agregarTexto(resultado, "Observaciones institucionales", datos.observaciones);
+  }
+
+  if (categoria === "Ponentes") {
+    agregarTexto(resultado, "Nombre del ponente", datos.nombre);
+    agregarTexto(resultado, "Empresa beneficiaria", datos.empresa);
+    agregarTexto(resultado, "Centro de aplicación", datos.centro);
+    agregarLista(resultado, "Programas vinculados", datos.programas);
+    agregarTexto(resultado, "Periodo", datos.periodo);
+    agregarTexto(resultado, "Duración", datos.duracion);
+  }
+
+  if (categoria === "Participantes") {
+    agregarTexto(resultado, "Nombre del participante", datos.nombre);
+    agregarTexto(resultado, "Empresa beneficiaria", datos.empresa);
+    agregarTexto(resultado, "Programa", datos.programa);
+    agregarTexto(resultado, "Periodo", datos.periodo);
+    agregarTexto(resultado, "Duración", datos.duracion);
+  }
+
+  const fecha = new Date().toLocaleString("es-MX");
+
+  agregarTabla(resultado, [
+    ["Estado del registro", "Válido en la base de datos local"],
+    ["Registro institucional", "Encontrado"],
+    ["Categoría consultada", categoria],
+    ["Organismo emisor registrado", "Corporativo Becam"],
+    ["Fecha y hora de consulta", fecha],
+    ["Código de validación", folio]
+  ]);
+
+  resultado.style.display = "block";
+}
+
+function consultar(event, categoria) {
+  event.preventDefault();
+
+  const input = document.getElementById("folio-" + categoria);
+  const loader = document.getElementById("loader-" + categoria);
+  const resultado = document.getElementById("resultado-" + categoria);
+
+  const folio = input.value.trim().toUpperCase();
+
+  input.value = folio;
+  resultado.style.display = "none";
+  resultado.replaceChildren();
+  loader.style.display = "block";
+
+  const bases = {
+    empresas: empresas,
+    ponentes: ponentes,
+    participantes: participantes
+  };
+
+  const nombres = {
+    empresas: "Empresas",
+    ponentes: "Ponentes",
+    participantes: "Participantes"
+  };
+
+  /*
+   * Simula el tiempo de consulta del sistema original.
+   */
+  window.setTimeout(() => {
+    loader.style.display = "none";
+
+    const registro = bases[categoria][folio];
+
+    if (!registro) {
+      mostrarNoEncontrado(resultado, folio, nombres[categoria]);
+      return;
+    }
+
+    mostrarResultado(resultado, folio, nombres[categoria], registro);
+  }, 500);
+}
+</script>
+
+</body>
+</html>
