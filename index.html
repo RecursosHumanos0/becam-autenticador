@@ -1,567 +1,1177 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sistema Institucional de Certificados</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#c8102e">
+  <title>Autenticación de Certificados | Corporativo Becam</title>
 
-<style>
-:root {
-  --rojo: #c8102e;
-  --rojo-oscuro: #a30d24;
-  --fondo: #f5f6f8;
-  --texto: #222;
-  --verde: #218838;
-}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-* { box-sizing: border-box; }
+  <style>
+    :root {
+      --rojo: #c8102e;
+      --rojo-hover: #a30d24;
+      --fondo: #f5f6f8;
+      --blanco: #ffffff;
+      --texto: #20242b;
+      --secundario: #697386;
+      --borde: #e3e6eb;
+      --verde: #16834a;
+      --verde-fondo: #eaf7ef;
+      --rojo-fondo: #fff0f1;
+      --sombra: 0 12px 35px rgba(23, 31, 45, 0.07);
+    }
 
-body {
-  font-family: Inter, sans-serif;
-  background: var(--fondo);
-  margin: 0;
-  color: var(--texto);
-}
+    * {
+      box-sizing: border-box;
+    }
 
-header {
-  background: var(--rojo);
-  color: white;
-  padding: 28px 18px;
-  text-align: center;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-header h1 { margin: 0 0 8px; }
-header h2 { font-size: 20px; margin: 0; }
-header p { margin-bottom: 0; line-height: 1.6; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--fondo);
+      color: var(--texto);
+      font-family: "Inter", Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
 
-main {
-  max-width: 1100px;
-  margin: 30px auto;
-  padding: 0 18px;
-}
+    button,
+    input {
+      font: inherit;
+    }
 
-.intro {
-  text-align: center;
-  margin-bottom: 25px;
-}
+    button {
+      cursor: pointer;
+    }
 
-.intro p {
-  color: #666;
-  line-height: 1.6;
-}
+    .site-header {
+      background: var(--rojo);
+      color: var(--blanco);
+      padding: 23px 24px;
+      box-shadow: 0 3px 12px rgba(80, 0, 15, 0.12);
+    }
 
-.ventanas {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  align-items: start;
-}
+    .header-inner {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
 
-.ventana {
-  background: white;
-  padding: 22px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.08);
-  min-width: 0;
-}
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: -1px;
+      flex-shrink: 0;
+    }
 
-.icono {
-  font-size: 30px;
-  margin-bottom: 10px;
-}
+    .brand-name {
+      margin: 0 0 5px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1.6px;
+    }
 
-.ventana h2 {
-  color: var(--rojo);
-  font-size: 21px;
-  margin: 0 0 8px;
-}
+    .brand-subtitle {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.9);
+    }
 
-.descripcion {
-  color: #666;
-  font-size: 13px;
-  line-height: 1.6;
-  min-height: 62px;
-}
+    main {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 48px 22px 60px;
+      flex: 1;
+    }
 
-label {
-  display: block;
-  font-weight: 600;
-  font-size: 14px;
-  margin: 18px 0 8px;
-}
+    .intro {
+      text-align: center;
+      margin: 0 auto 32px;
+      max-width: 680px;
+    }
 
-input {
-  display: block;
-  width: 100%;
-  min-width: 0;
-  padding: 12px 10px;
-  border: 1px solid #bbb;
-  border-radius: 6px;
-  font: inherit;
-  font-size: 14px;
-  text-transform: uppercase;
-}
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 14px;
+      color: var(--rojo);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.7px;
+      text-transform: uppercase;
+    }
 
-input::placeholder {
-  color: #a0a0a0;
-  opacity: 1;
-}
+    .intro h1 {
+      margin: 0 0 13px;
+      font-size: clamp(26px, 4vw, 36px);
+      line-height: 1.2;
+      letter-spacing: -1.2px;
+    }
 
-input:focus {
-  outline: 2px solid #c8102e30;
-  border-color: var(--rojo);
-}
+    .intro p {
+      margin: 0;
+      color: var(--secundario);
+      font-size: 14px;
+      line-height: 1.8;
+    }
 
-button {
-  width: 100%;
-  margin-top: 12px;
-  background: var(--rojo);
-  color: white;
-  border: 0;
-  padding: 12px 14px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
+    .panel {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 30px;
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 18px;
+      box-shadow: var(--sombra);
+    }
 
-button:hover { background: var(--rojo-oscuro); }
+    .panel-heading {
+      margin-bottom: 23px;
+    }
 
-.loader {
-  display: none;
-  text-align: center;
-  padding: 18px 5px;
-  color: #666;
-  font-size: 13px;
-}
+    .panel-heading h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      letter-spacing: -0.4px;
+    }
 
-.resultado {
-  display: none;
-  background: #fafafa;
-  border-left: 4px solid var(--verde);
-  padding: 16px;
-  margin-top: 20px;
-  overflow-wrap: anywhere;
-  font-size: 13px;
-  line-height: 1.7;
-}
+    .panel-heading p {
+      margin: 0;
+      color: var(--secundario);
+      font-size: 13px;
+      line-height: 1.7;
+    }
 
-.resultado.error { border-left-color: var(--rojo); }
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
 
-.resultado h3 {
-  font-size: 16px;
-  margin: 16px 0 8px;
-}
+    .category-card {
+      min-width: 0;
+      padding: 23px 16px;
+      text-align: left;
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 14px;
+      color: var(--texto);
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
 
-.resultado h4 {
-  font-size: 14px;
-  margin-bottom: 6px;
-}
+    .category-card:hover {
+      border-color: var(--rojo);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 22px rgba(200, 16, 46, 0.09);
+    }
 
-.ok { color: var(--verde); }
-.err { color: var(--rojo); }
+    .category-icon {
+      width: 54px;
+      height: 54px;
+      margin-bottom: 19px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff0f2;
+      border-radius: 14px;
+      font-size: 28px;
+    }
 
-.lista {
-  padding-left: 20px;
-  margin: 8px 0 14px;
-}
+    .category-card h2 {
+      margin: 0 0 9px;
+      font-size: 16px;
+      font-weight: 800;
+    }
 
-.lista li { margin-bottom: 5px; }
+    .category-card p {
+      margin: 0;
+      color: var(--secundario);
+      font-size: 12px;
+      line-height: 1.7;
+    }
 
-.tabla-contenedor {
-  overflow-x: auto;
-  max-width: 100%;
-}
+    .category-arrow {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 18px;
+      color: var(--rojo);
+      font-size: 20px;
+      font-weight: 700;
+    }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  font-size: 12px;
-}
+    .section-top {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 25px;
+    }
 
-td, th {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-  vertical-align: top;
-}
+    .section-icon {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: #fff0f2;
+      border-radius: 13px;
+      font-size: 27px;
+    }
 
-th {
-  background: #eee;
-}
+    .section-top h2 {
+      margin: 0 0 5px;
+      font-size: 20px;
+    }
 
-.nota {
-  color: #666;
-  font-size: 12px;
-}
+    .section-top p {
+      margin: 0;
+      color: var(--secundario);
+      font-size: 12px;
+      line-height: 1.6;
+    }
 
-footer {
-  text-align: center;
-  color: #666;
-  padding: 25px 15px;
-  font-size: 12px;
-  line-height: 1.7;
-}
+    .field-label {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 13px;
+      font-weight: 700;
+    }
 
-@media (max-width: 850px) {
-  .ventanas { grid-template-columns: 1fr; }
-  .descripcion { min-height: auto; }
-  .ventana { padding: 22px; }
-}
-</style>
+    .input-wrap {
+      position: relative;
+    }
+
+    .folio-input {
+      width: 100%;
+      min-height: 53px;
+      padding: 0 15px;
+      color: var(--texto);
+      background: #fff;
+      border: 1px solid #d9dee7;
+      border-radius: 10px;
+      outline: none;
+      text-transform: uppercase;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .folio-input:focus {
+      border-color: var(--rojo);
+      box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+    }
+
+    .folio-input::placeholder {
+      color: #a2aab7;
+      text-transform: none;
+    }
+
+    .field-help {
+      margin: 9px 0 0;
+      color: var(--secundario);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      min-height: 46px;
+      padding: 0 19px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: var(--rojo);
+      color: var(--blanco);
+    }
+
+    .btn-primary:hover {
+      background: var(--rojo-hover);
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: #404958;
+      border-color: var(--borde);
+    }
+
+    .btn-secondary:hover {
+      background: #f8f9fb;
+      border-color: #c8ced8;
+    }
+
+    .validation-panel {
+      text-align: center;
+      padding: 48px 30px;
+    }
+
+    .loader {
+      width: 62px;
+      height: 62px;
+      margin: 0 auto 25px;
+      border: 5px solid #f6d9de;
+      border-top-color: var(--rojo);
+      border-radius: 50%;
+      animation: girar 0.85s linear infinite;
+    }
+
+    @keyframes girar {
+      to { transform: rotate(360deg); }
+    }
+
+    .validation-panel h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+
+    .validation-panel p {
+      margin: 0;
+      color: var(--secundario);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .progress-track {
+      width: 100%;
+      max-width: 360px;
+      height: 6px;
+      margin: 26px auto 0;
+      overflow: hidden;
+      background: #f1dfe2;
+      border-radius: 20px;
+    }
+
+    .progress-bar {
+      width: 35%;
+      height: 100%;
+      background: var(--rojo);
+      border-radius: 20px;
+      animation: progreso 1.4s ease-in-out forwards;
+    }
+
+    @keyframes progreso {
+      from { width: 5%; }
+      to { width: 100%; }
+    }
+
+    .result-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--borde);
+      margin-bottom: 24px;
+    }
+
+    .result-status-icon {
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: var(--verde-fondo);
+      border-radius: 50%;
+      color: var(--verde);
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .result-status-icon.invalid {
+      background: var(--rojo-fondo);
+      color: var(--rojo);
+    }
+
+    .result-top h2 {
+      margin: 0 0 7px;
+      font-size: 21px;
+    }
+
+    .result-top p {
+      margin: 0;
+      color: var(--secundario);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .status-pill {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 10px;
+      border-radius: 30px;
+      background: var(--verde-fondo);
+      color: var(--verde);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    .status-pill.invalid {
+      background: var(--rojo-fondo);
+      color: var(--rojo);
+    }
+
+    .result-section-title {
+      margin: 0 0 14px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .data-item {
+      min-width: 0;
+      padding: 15px;
+      background: #f8f9fb;
+      border: 1px solid #edf0f4;
+      border-radius: 10px;
+    }
+
+    .data-item.full {
+      grid-column: 1 / -1;
+    }
+
+    .data-label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--secundario);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .data-value {
+      display: block;
+      overflow-wrap: anywhere;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.7;
+    }
+
+    .data-value.regular {
+      font-weight: 400;
+    }
+
+    .program-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .result-note {
+      margin-top: 20px;
+      padding: 14px 16px;
+      border-left: 3px solid var(--rojo);
+      background: #fff7f8;
+      border-radius: 0 8px 8px 0;
+      color: #5f4650;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .empty-message {
+      padding: 20px;
+      border: 1px solid var(--borde);
+      border-radius: 10px;
+      background: #f8f9fb;
+      color: var(--secundario);
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .site-footer {
+      padding: 23px 20px;
+      text-align: center;
+      border-top: 1px solid var(--borde);
+      color: var(--secundario);
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .site-footer strong {
+      color: #4a5260;
+    }
+
+    @media (max-width: 700px) {
+      main {
+        padding: 34px 16px 42px;
+      }
+
+      .site-header {
+        padding: 18px 17px;
+      }
+
+      .brand-mark {
+        width: 43px;
+        height: 43px;
+      }
+
+      .brand-name {
+        font-size: 12px;
+      }
+
+      .brand-subtitle {
+        font-size: 11px;
+      }
+
+      .intro {
+        margin-bottom: 25px;
+      }
+
+      .panel {
+        padding: 23px 19px;
+        border-radius: 15px;
+      }
+
+      .category-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .category-card {
+        display: grid;
+        grid-template-columns: 55px 1fr 20px;
+        align-items: center;
+        gap: 13px;
+        padding: 16px;
+      }
+
+      .category-icon {
+        width: 50px;
+        height: 50px;
+        margin: 0;
+        font-size: 26px;
+      }
+
+      .category-card h2 {
+        margin-bottom: 5px;
+      }
+
+      .category-card p {
+        font-size: 11px;
+      }
+
+      .category-arrow {
+        margin: 0;
+        align-self: center;
+      }
+
+      .data-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .data-item.full {
+        grid-column: auto;
+      }
+
+      .button-row {
+        flex-direction: column;
+      }
+
+      .button-row .btn {
+        width: 100%;
+        flex: auto;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
-
-<header>
-  <h1>Corporativo Becam</h1>
-  <h2>Sistema Institucional de Autenticación de Certificados</h2>
-  <p>Portal de consulta y validación institucional de certificados.</p>
-</header>
-
-<main>
-  <section class="intro">
-    <h2>Consulta de certificados</h2>
-    <p>Selecciona la categoría correspondiente e ingresa el folio que aparece en tu documento.</p>
-  </section>
-
-  <section class="ventanas">
-
-    <!-- VENTANA 1: EMPRESAS -->
-    <article class="ventana">
-      <div class="icono" aria-hidden="true">🏢</div>
-      <h2>Empresas</h2>
-      <p class="descripcion">
-        Consulta la validación institucional de programas de capacitación empresarial.
-      </p>
-
-      <form onsubmit="consultar(event, 'empresas')">
-        <label for="folio-empresas">Folio de empresa</label>
-        <input id="folio-empresas"
-          placeholder="AAA-AAA-000"
-          autocomplete="off"
-          required>
-        <button type="submit">Consultar certificado</button>
-      </form>
-
-      <div id="loader-empresas" class="loader" role="status">
-        Validando certificado...
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand-mark" aria-hidden="true">BC</div>
+      <div>
+        <p class="brand-name">CORPORATIVO BECAM</p>
+        <p class="brand-subtitle">Sistema Institucional de Autenticación de Certificados</p>
       </div>
-      <div id="resultado-empresas" class="resultado" aria-live="polite"></div>
-    </article>
+    </div>
+  </header>
 
-    <!-- VENTANA 2: PONENTES -->
-    <article class="ventana">
-      <div class="icono" aria-hidden="true">🎓</div>
-      <h2>Ponentes</h2>
-      <p class="descripcion">
-        Verifica el registro institucional de los instructores y ponentes.
-      </p>
-
-      <form onsubmit="consultar(event, 'ponentes')">
-        <label for="folio-ponentes">Folio de ponente</label>
-        <input id="folio-ponentes"
-          placeholder="AAA-AAA-000"
-          autocomplete="off"
-          required>
-        <button type="submit">Consultar certificado</button>
-      </form>
-
-      <div id="loader-ponentes" class="loader" role="status">
-        Validando certificado...
+  <main>
+    <!-- PANTALLA 1: SELECCIÓN DE CATEGORÍA -->
+    <section id="screen-home">
+      <div class="intro">
+        <span class="eyebrow">Portal institucional</span>
+        <h1>Autenticación de certificados</h1>
+        <p>
+          Consulta y verifica los registros institucionales de capacitación
+          mediante el folio correspondiente.
+        </p>
       </div>
-      <div id="resultado-ponentes" class="resultado" aria-live="polite"></div>
-    </article>
 
-    <!-- VENTANA 3: PARTICIPANTES -->
-    <article class="ventana">
-      <div class="icono" aria-hidden="true">👥</div>
-      <h2>Participantes</h2>
-      <p class="descripcion">
-        Consulta las constancias individuales de participación en los programas de capacitación.
-      </p>
+      <div class="panel">
+        <div class="panel-heading">
+          <h2>¿Qué deseas consultar?</h2>
+          <p>Selecciona una categoría para comenzar la búsqueda de tu registro.</p>
+        </div>
 
-      <form onsubmit="consultar(event, 'participantes')">
-        <label for="folio-participantes">Folio de participante</label>
-        <input id="folio-participantes"
-          placeholder="AAA-AAA-000"
-          autocomplete="off"
-          required>
-        <button type="submit">Consultar certificado</button>
-      </form>
+        <div class="category-grid">
+          <button class="category-card" type="button"
+            onclick="seleccionarCategoria('empresas')">
+            <div class="category-icon" aria-hidden="true">🏢</div>
+            <div>
+              <h2>Empresas</h2>
+              <p>Consulta registros institucionales y programas de capacitación.</p>
+            </div>
+            <span class="category-arrow" aria-hidden="true">›</span>
+          </button>
 
-      <div id="loader-participantes" class="loader" role="status">
-        Validando certificado...
+          <button class="category-card" type="button"
+            onclick="seleccionarCategoria('ponentes')">
+            <div class="category-icon" aria-hidden="true">🎓</div>
+            <div>
+              <h2>Ponentes</h2>
+              <p>Verifica la información y los cursos asociados a cada ponente.</p>
+            </div>
+            <span class="category-arrow" aria-hidden="true">›</span>
+          </button>
+
+          <button class="category-card" type="button"
+            onclick="seleccionarCategoria('participantes')">
+            <div class="category-icon" aria-hidden="true">👥</div>
+            <div>
+              <h2>Participantes</h2>
+              <p>Consulta los registros individuales de capacitación.</p>
+            </div>
+            <span class="category-arrow" aria-hidden="true">›</span>
+          </button>
+        </div>
       </div>
-      <div id="resultado-participantes" class="resultado" aria-live="polite"></div>
-    </article>
+    </section>
 
-  </section>
-</main>
+    <!-- PANTALLA 2: CAPTURA DEL FOLIO -->
+    <section id="screen-search" class="hidden">
+      <div class="intro">
+        <span class="eyebrow">Consulta de registros</span>
+        <h1>Verifica tu información</h1>
+        <p>Ingresa el folio para consultar el registro correspondiente.</p>
+      </div>
 
-<footer>
-  ©️ 2026 Corporativo Becam<br>
-  Sistema Institucional de Autenticación de Certificados
-</footer>
+      <div class="panel">
+        <div class="section-top">
+          <div id="search-icon" class="section-icon" aria-hidden="true">🏢</div>
+          <div>
+            <h2 id="search-title">Consulta de empresas</h2>
+            <p id="search-description">Consulta un registro institucional.</p>
+          </div>
+        </div>
 
-<script>
-/*
- * REGISTRO INSTITUCIONAL
- * Los datos de ejemplo se almacenan en este objeto.
- * Los folios son únicos dentro de cada categoría.
- */
+        <form id="search-form" onsubmit="iniciarValidacion(event)">
+          <label class="field-label" for="folio">Folio de autenticación</label>
+          <div class="input-wrap">
+            <input
+              id="folio"
+              class="folio-input"
+              name="folio"
+              type="text"
+              placeholder="Ej. CAP-DOCU-001"
+              autocomplete="off"
+              autocapitalize="characters"
+              maxlength="60"
+              required
+            >
+          </div>
+          <p id="field-help" class="field-help">
+            Escribe el folio tal como aparece en tu registro o certificado.
+          </p>
 
-const programasDocuPuebla = [
-  "Comunicación asertiva",
-  "Trabajo en equipo",
-  "Liderazgo transformacional",
-  "Gestión del tiempo",
-  "Manejo de conflictos",
-  "Orientación a resultados"
-];
+          <div class="button-row">
+            <button class="btn btn-primary" type="submit">Consultar folio →</button>
+            <button class="btn btn-secondary" type="button" onclick="volverInicio()">
+              ← Regresar
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
 
-const instructoresDocuPuebla = [
-  "Lic. José Rodríguez",
-  "Lic. Karla Rubio"
-];
+    <!-- PANTALLA 3: VALIDACIÓN -->
+    <section id="screen-validation" class="hidden">
+      <div class="panel validation-panel">
+        <div class="loader" role="status" aria-label="Validando"></div>
+        <h2>Validando registro…</h2>
+        <p>
+          Estamos consultando la información asociada al folio ingresado.<br>
+          Por favor, espera un momento.
+        </p>
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+    </section>
 
-/* Registro de EMPRESAS */
-const empresas = {
-  "CAP-DOCU-001": {
-    empresaEmisora: "Corporativo Becam",
-    empresaBeneficiaria: "DocuPuebla S.A. de C.V.",
-    centro: "CEDIS-Reforma Puebla",
-    instructores: instructoresDocuPuebla,
-    programas: programasDocuPuebla,
-    periodo: "Octubre – noviembre de 2026",
-    duracion: "2 meses",
-    promedio: "10 colaboradores por curso impartido",
-    participantes: [
-      "José",
-      "Monse",
-      "Karla",
-      "Nancy",
-      "Antonio"
-    ],
-    observaciones:
-      "Registro correspondiente al cumplimiento del calendario de capacitaciones en habilidades blandas, orientado al desarrollo de los colaboradores."
-  }
-};
+    <!-- PANTALLA 4: RESULTADO -->
+    <section id="screen-result" class="hidden">
+      <div class="intro">
+        <span class="eyebrow">Resultado de consulta</span>
+        <h1>Detalle del registro</h1>
+        <p>Información asociada al folio ingresado.</p>
+      </div>
 
-/* Registro de PONENTES */
-const ponentes = {
-  "CAP-HAB-001": {
-    nombre: "Lic. Karla Lisset Rubio Hernández",
-    empresa: "DocuPuebla S.A. de C.V.",
-    centro: "CEDIS-Reforma Puebla",
-    programas: programasDocuPuebla,
-    periodo: "Octubre – noviembre de 2026",
-    duracion: "2 meses"
-  },
+      <div class="panel">
+        <div class="result-top">
+          <div id="result-status-icon" class="result-status-icon" aria-hidden="true">✓</div>
+          <div>
+            <h2 id="result-title">Registro localizado</h2>
+            <p id="result-subtitle">Se encontró información asociada al folio consultado.</p>
+            <span id="result-status" class="status-pill">Registro localizado</span>
+          </div>
+        </div>
 
-  "CAP-HAB-002": {
-    nombre: "Lic. José Manuel Rodríguez Gaona",
-    empresa: "DocuPuebla S.A. de C.V.",
-    centro: "CEDIS-Reforma Puebla",
-    programas: programasDocuPuebla,
-    periodo: "Octubre – noviembre de 2026",
-    duracion: "2 meses"
-  }
-};
+        <div id="result-content"></div>
 
-/*
- * PARTICIPANTES
- * Aún no se asignan folios individuales.
- * Agrega cada registro cuando se definan sus folios.
- */
-const participantes = {};
+        <div class="button-row">
+          <button class="btn btn-primary" type="button" onclick="nuevaConsulta()">
+            Nueva consulta
+          </button>
+          <button class="btn btn-secondary" type="button" onclick="volverInicio()">
+            ← Volver al inicio
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
 
+  <footer class="site-footer">
+    <strong>Corporativo Becam</strong><br>
+    Sistema Institucional de Autenticación de Certificados<br>
+    <span>Consulta de registros de capacitación.</span>
+  </footer>
 
-/* Funciones para construir resultados de manera segura */
+  <script>
+    // =========================================================
+    // 1. INFORMACIÓN GENERAL
+    // =========================================================
 
-function crearElemento(etiqueta, texto, clase) {
-  const elemento = document.createElement(etiqueta);
-  if (texto !== undefined) elemento.textContent = texto;
-  if (clase) elemento.className = clase;
-  return elemento;
-}
+    const programasDocuPuebla = [
+      "Comunicación asertiva",
+      "Trabajo en equipo",
+      "Liderazgo transformacional",
+      "Gestión del tiempo",
+      "Manejo de conflictos",
+      "Orientación a resultados"
+    ];
 
-function agregarTexto(contenedor, etiqueta, valor) {
-  const p = document.createElement("p");
-  const strong = crearElemento("strong", etiqueta + ": ");
-  p.append(strong, document.createTextNode(valor));
-  contenedor.appendChild(p);
-}
+    const instructoresDocuPuebla = [
+      "Lic. José Rodríguez",
+      "Lic. Karla Rubio"
+    ];
 
-function agregarLista(contenedor, titulo, elementos) {
-  contenedor.appendChild(crearElemento("h4", titulo));
-  const ul = crearElemento("ul", undefined, "lista");
+    // =========================================================
+    // 2. BASE DE DATOS: EMPRESAS
+    // =========================================================
 
-  elementos.forEach(texto => {
-    ul.appendChild(crearElemento("li", texto));
-  });
+    const empresas = {
+      "CAP-DOCU-001": {
+        empresaEmisora: "Corporativo Becam",
+        empresaBeneficiaria: "DocuPuebla S.A. de C.V.",
+        centro: "CEDIS-Reforma Puebla",
+        instructores: instructoresDocuPuebla,
+        programas: programasDocuPuebla,
+        periodo: "Octubre – noviembre de 2026",
+        duracion: "2 meses",
+        promedio: "10 colaboradores por curso impartido",
+        participantes: [
+          "José",
+          "Monse",
+          "Karla",
+          "Nancy",
+          "Antonio"
+        ],
+        observaciones:
+          "Registro correspondiente al cumplimiento del calendario de capacitaciones en habilidades blandas, orientado al desarrollo de los colaboradores."
+      }
+    };
 
-  contenedor.appendChild(ul);
-}
+    // =========================================================
+    // 3. BASE DE DATOS: PONENTES
+    // =========================================================
 
-function agregarTabla(contenedor, filas) {
-  contenedor.appendChild(crearElemento("h3", "Resultado de la validación institucional"));
+    const ponentes = {
+      "CAP-HAB-001": {
+        nombre: "Lic. Karla Lisset Rubio Hernández",
+        empresa: "DocuPuebla S.A. de C.V.",
+        centro: "CEDIS-Reforma Puebla",
+        programas: programasDocuPuebla,
+        periodo: "Octubre – noviembre de 2026",
+        duracion: "2 meses"
+      },
 
-  const wrapper = crearElemento("div", undefined, "tabla-contenedor");
-  const tabla = document.createElement("table");
-  const thead = document.createElement("thead");
-  const encabezado = document.createElement("tr");
+      "CAP-HAB-002": {
+        nombre: "Lic. José Manuel Rodríguez Gaona",
+        empresa: "DocuPuebla S.A. de C.V.",
+        centro: "CEDIS-Reforma Puebla",
+        programas: programasDocuPuebla,
+        periodo: "Octubre – noviembre de 2026",
+        duracion: "2 meses"
+      }
+    };
 
-  ["Concepto", "Resultado"].forEach(texto => {
-    encabezado.appendChild(crearElemento("th", texto));
-  });
+    // =========================================================
+    // 4. BASE DE DATOS: PARTICIPANTES
+    // Agrega aquí cada participante utilizando su folio.
+    // =========================================================
 
-  thead.appendChild(encabezado);
-  tabla.appendChild(thead);
+    const participantes = {
+      /*
+      "CAP-PAR-001": {
+        nombre: "Nombre del participante",
+        empresa: "DocuPuebla S.A. de C.V.",
+        centro: "CEDIS-Reforma Puebla",
+        curso: "Comunicación asertiva",
+        periodo: "Octubre de 2026",
+        estatus: "Acreditado"
+      }
+      */
+    };
 
-  const tbody = document.createElement("tbody");
+    // =========================================================
+    // 5. CONFIGURACIÓN DE CATEGORÍAS
+    // =========================================================
 
-  filas.forEach(([concepto, valor]) => {
-    const tr = document.createElement("tr");
-    tr.appendChild(crearElemento("td", concepto));
-    tr.appendChild(crearElemento("td", valor));
-    tbody.appendChild(tr);
-  });
+    const configuracion = {
+      empresas: {
+        titulo: "Consulta de empresas",
+        descripcion: "Consulta registros institucionales y programas de capacitación.",
+        icono: "🏢",
+        placeholder: "Ej. CAP-DOCU-001",
+        ayuda: "Ingresa el folio institucional de la empresa."
+      },
 
-  tabla.appendChild(tbody);
-  wrapper.appendChild(tabla);
-  contenedor.appendChild(wrapper);
-}
+      ponentes: {
+        titulo: "Consulta de ponentes",
+        descripcion: "Verifica los registros de los responsables de impartir capacitación.",
+        icono: "🎓",
+        placeholder: "Ej. CAP-HAB-001",
+        ayuda: "Ingresa el folio asignado al ponente."
+      },
 
-function mostrarNoEncontrado(resultado, folio, categoria) {
-  resultado.replaceChildren();
-  resultado.classList.add("error");
+      participantes: {
+        titulo: "Consulta de participantes",
+        descripcion: "Consulta la información asociada al registro de capacitación.",
+        icono: "👥",
+        placeholder: "Ej. CAP-PAR-001",
+        ayuda: "Ingresa el folio individual del participante."
+      }
+    };
 
-  resultado.appendChild(
-    crearElemento("h3", "Folio no encontrado", "err")
-  );
+    let categoriaActual = null;
+    let folioActual = "";
 
-  resultado.appendChild(
-    crearElemento(
-      "p",
-      "El folio " + folio +
-      " no está registrado en la categoría " + categoria +
-      " de esta base de datos institucional."
-    )
-  );
+    // =========================================================
+    // 6. CONTROL DE PANTALLAS
+    // =========================================================
 
-  resultado.style.display = "block";
-}
+    function mostrarPantalla(pantalla) {
+      const pantallas = [
+        "screen-home",
+        "screen-search",
+        "screen-validation",
+        "screen-result"
+      ];
 
-function mostrarResultado(resultado, folio, categoria, datos) {
-  resultado.replaceChildren();
-  resultado.classList.remove("error");
+      pantallas.forEach(function(id) {
+        document.getElementById(id).classList.add("hidden");
+      });
 
-  resultado.appendChild(
-    crearElemento("h3", "CERTIFICADO VÁLIDO", "ok")
-  );
-
-  resultado.appendChild(
-    crearElemento(
-      "p",
-      "El folio consultado se encuentra registrado en la categoría " +
-      categoria + " de la base de datos institucional."
-    )
-  );
-
-  resultado.appendChild(crearElemento("h3", "Información del certificado"));
-
-  agregarTexto(resultado, "Folio", folio);
-
-  if (categoria === "Empresas") {
-    agregarTexto(resultado, "Empresa emisora", datos.empresaEmisora);
-    agregarTexto(resultado, "Empresa beneficiaria", datos.empresaBeneficiaria);
-    agregarTexto(resultado, "Centro de aplicación", datos.centro);
-    agregarLista(resultado, "Instructores", datos.instructores);
-    agregarLista(resultado, "Programas de capacitación", datos.programas);
-    agregarTexto(resultado, "Periodo", datos.periodo);
-    agregarTexto(resultado, "Duración", datos.duracion);
-    agregarTexto(resultado, "Participantes promedio", datos.promedio);
-    agregarLista(resultado, "Participantes registrados", datos.participantes);
-    agregarTexto(resultado, "Observaciones institucionales", datos.observaciones);
-  }
-
-  if (categoria === "Ponentes") {
-    agregarTexto(resultado, "Nombre del ponente", datos.nombre);
-    agregarTexto(resultado, "Empresa beneficiaria", datos.empresa);
-    agregarTexto(resultado, "Centro de aplicación", datos.centro);
-    agregarLista(resultado, "Programas vinculados", datos.programas);
-    agregarTexto(resultado, "Periodo", datos.periodo);
-    agregarTexto(resultado, "Duración", datos.duracion);
-  }
-
-  if (categoria === "Participantes") {
-    agregarTexto(resultado, "Nombre del participante", datos.nombre);
-    agregarTexto(resultado, "Empresa beneficiaria", datos.empresa);
-    agregarTexto(resultado, "Programa", datos.programa);
-    agregarTexto(resultado, "Periodo", datos.periodo);
-    agregarTexto(resultado, "Duración", datos.duracion);
-  }
-
-  const fecha = new Date().toLocaleString("es-MX");
-
-  agregarTabla(resultado, [
-    ["Estado del registro", "Válido en la base de datos local"],
-    ["Registro institucional", "Encontrado"],
-    ["Categoría consultada", categoria],
-    ["Organismo emisor registrado", "Corporativo Becam"],
-    ["Fecha y hora de consulta", fecha],
-    ["Código de validación", folio]
-  ]);
-
-  resultado.style.display = "block";
-}
-
-function consultar(event, categoria) {
-  event.preventDefault();
-
-  const input = document.getElementById("folio-" + categoria);
-  const loader = document.getElementById("loader-" + categoria);
-  const resultado = document.getElementById("resultado-" + categoria);
-
-  const folio = input.value.trim().toUpperCase();
-
-  input.value = folio;
-  resultado.style.display = "none";
-  resultado.replaceChildren();
-  loader.style.display = "block";
-
-  const bases = {
-    empresas: empresas,
-    ponentes: ponentes,
-    participantes: participantes
-  };
-
-  const nombres = {
-    empresas: "Empresas",
-    ponentes: "Ponentes",
-    participantes: "Participantes"
-  };
-
-  /*
-   * Simula el tiempo de consulta del sistema original.
-   */
-  window.setTimeout(() => {
-    loader.style.display = "none";
-
-    const registro = bases[categoria][folio];
-
-    if (!registro) {
-      mostrarNoEncontrado(resultado, folio, nombres[categoria]);
-      return;
+      document.getElementById(pantalla).classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    mostrarResultado(resultado, folio, nombres[categoria], registro);
-  }, 500);
-}
-</script>
+    function seleccionarCategoria(categoria) {
+      if (!configuracion[categoria]) return;
 
+      categoriaActual = categoria;
+
+      const config = configuracion[categoria];
+
+      document.getElementById("search-icon").textContent = config.icono;
+      document.getElementById("search-title").textContent = config.titulo;
+      document.getElementById("search-description").textContent = config.descripcion;
+      document.getElementById("folio").placeholder = config.placeholder;
+      document.getElementById("field-help").textContent = config.ayuda;
+
+      document.getElementById("search-form").reset();
+
+      mostrarPantalla("screen-search");
+
+      setTimeout(function() {
+        document.getElementById("folio").focus();
+      }, 250);
+    }
+
+    function volverInicio() {
+      categoriaActual = null;
+      folioActual = "";
+      mostrarPantalla("screen-home");
+    }
+
+    function nuevaConsulta() {
+      if (categoriaActual && configuracion[categoriaActual]) {
+        seleccionarCategoria(categoriaActual);
+      } else {
+        volverInicio();
+      }
+    }
+
+    // =========================================================
+    // 7. CONSULTA Y VALIDACIÓN DEL FOLIO
+    // =========================================================
+
+    function iniciarValidacion(event) {
+      event.preventDefault();
+
+      if (!categoriaActual) {
+        volverInicio();
+        return;
+      }
+
+      const folio = document.getElementById("folio").value
+        .trim()
+        .toUpperCase();
+
+      if (!folio) {
+        document.getElementById("folio").focus();
+        return;
+      }
+
+      folioActual = folio;
+
+      // La pantalla de captura desaparece durante la validación.
+      mostrarPantalla("screen-validation");
+
+      // Animación visual de consulta.
+      setTimeout(function() {
+        const registro = buscarRegistro(categoriaActual, folioActual);
+        mostrarResultado(registro, folioActual);
+      }, 1500);
+    }
+
+    function buscarRegistro(categoria, folio) {
+      const bases = {
+        empresas: empresas,
+        ponentes: ponentes,
+        participantes: participantes
+      };
+
+      const base = bases[categoria];
+
+      if (!base) return null;
+
+      return base[folio] || null;
+    }
+
+    // =========================================================
+    // 8. PRESENTACIÓN DEL RESULTADO
+    // =========================================================
+
+    function mostrarResultado(registro, folio) {
+      const icono = document.getElementById("result-status-icon");
+      const titulo = document.getElementById("result-title");
+      const subtitulo = document.getElementById("result-subtitle");
+      const estado = document.getElementById("result-status");
+      const contenido = document.getElementById("result-content");
+
+      contenido.replaceChildren();
+
+      if (!registro) {
+        icono.textContent = "!";
+        icono.classList.add("invalid");
+
+        titulo.textContent = "Registro no localizado";
+        subtitulo.textContent =
+          "No se encontró un registro para el folio ingresado en la categoría seleccionada.";
+
+        estado.textContent = "Sin coincidencias";
+        estado.classList.add("invalid");
+
+        const mensaje = document.createElement("div");
+        mensaje.className = "empty-message";
+        mensaje.textContent =
+          "Verifica que el folio esté escrito correctamente y corresponda a la categoría seleccionada. Si el problema continúa, comunícate con Corporativo Becam para revisar el registro.";
+
+        contenido.appendChild(mensaje);
+
+        mostrarPantalla("screen-result");
+        return;
+      }
+
+      icono.textContent = "✓";
+      icono.classList.remove("invalid");
+
+      titulo.textContent = "Registro localizado";
+      subtitulo.textContent =
+        "Se encontró información asociada al folio consultado.";
+
+      estado.textContent = "Coincidencia encontrada";
+      estado.classList.remove("invalid");
+
+      agregarCampo(contenido, "Folio de registro", folio);
+      agregarCampo(contenido, "Categoría", nombreCategoria(categoriaActual));
+
+      if (categoriaActual === "empresas") {
+        renderizarEmpresa(contenido, registro);
+      } else if (categoriaActual === "ponentes") {
+        renderizarPonente(contenido, registro);
+      } else if (categoriaActual === "participantes") {
+        renderizarParticipante(contenido, registro);
+      }
+
+      mostrarPantalla("screen-result");
+    }
+
+    function nombreCategoria(categoria) {
+      const nombres = {
+        empresas: "Empresas",
+        ponentes: "Ponentes",
+        participantes: "Participantes"
+      };
+
+      return nombres[categoria] || "Registro";
+    }
+
+    // =========================================================
+    // 9. FUNCIONES PARA MOSTRAR DATOS
+    // =========================================================
+
+    function agregarCampo(contenedor, etiqueta, valor, completo) {
+      if (valor === undefined || valor === null || valor === "") return;
+
+      const item = document.createElement("div");
+      item.className = "data-item" + (completo ? " full" : "");
+
+      const label = document.createElement("span");
+      label.className = "data-label";
+      label.textContent = etiqueta;
+
+      const contenido = document.createElement("span");
+      contenido.className = "data-value";
+      contenido.textContent = String(valor);
+
+      item.appendChild(label);
+      item.appendChild(contenido);
+      contenedor.appendChild(item);
+    }
+
+    function agregarLista(contenedor, etiqueta, elementos) {
+      if (!Array.isArray(elementos) || elementos.length === 0) return;
+
+      const item = document.createElement("div");
+      item.className = "data-item full";
+
+      const label = document.createElement("span");
+      label.className = "data-label";
+      label.textContent = etiqueta;
+
+      const lista = document.createElement("ul");
+      lista.className = "program-list";
+
+      elementos.forEach(function(elemento) {
+        const li = document.createElement("li");
+        li.textContent = String(elemento);
+        lista.appendChild(li);
+      });
+
+      item.appendChild(label);
+      item.appendChild(lista);
+      contenedor.appendChild(item);
+    }
+
+    function agregarObservacion(contenedor, texto) {
+      if (!texto) return;
+
+      const nota = document.createElement("div");
+      nota.className = "result-note";
+      nota.textContent = texto;
+      contenedor.appendChild(nota);
+    }
+
+    function renderizarEmpresa(contenedor, registro) {
+      agregarCampo(contenedor, "Entidad emisora", registro.empresaEmisora);
+      agregarCampo(contenedor, "Empresa beneficiaria", registro.empresaBeneficiaria);
+      agregarCampo(contenedor, "Centro de trabajo", registro.centro);
+      agregarCampo(contenedor, "Periodo de capacitación", registro.periodo);
+      agregarCampo(contenedor, "Duración", registro.duracion);
+      agregarCampo(contenedor, "Participación promedio", registro.promedio, true);
+
+      agregarLista(contenedor, "Programas de capacitación", registro.programas);
+      agregarLista(contenedor, "Instructores registrados", registro.instructores);
+
+      if (registro.participantes && registro.participantes.length) {
+        agregarLista(contenedor, "Participantes registrados", registro.participantes);
+      }
+
+      agregarObservacion(contenedor, registro.observaciones);
+    }
+
+    function renderizarPonente(contenedor, registro) {
+      agregarCampo(contenedor, "Nombre del ponente", registro.nombre, true);
+      agregarCampo(contenedor, "Empresa", registro.empresa);
+      agregarCampo(contenedor, "Centro de trabajo", registro.centro);
+      agregarCampo(contenedor, "Periodo de participación", registro.periodo);
+      agregarCampo(contenedor, "Duración", registro.duracion);
+
+      agregarLista(contenedor, "Programas asociados", registro.programas);
+    }
+
+    function renderizarParticipante(contenedor, registro) {
+      agregarCampo(contenedor, "Nombre del participante", registro.nombre, true);
+      agregarCampo(contenedor, "Empresa", registro.empresa);
+      agregarCampo(contenedor, "Centro de trabajo", registro.centro);
+      agregarCampo(contenedor, "Curso registrado", registro.curso);
+      agregarCampo(contenedor, "Periodo", registro.periodo);
+      agregarCampo(contenedor, "Estatus", registro.estatus);
+    }
+  </script>
 </body>
 </html>
