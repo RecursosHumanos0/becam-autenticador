@@ -625,6 +625,56 @@
         transition-duration: 0.01ms !important;
       }
     }
+    
+/* =========================================================
+   AJUSTE ESTÉTICO: SELECCIÓN DE CATEGORÍAS
+   Empresas y Ponentes
+   ========================================================= */
+
+/* Ajustar el panel principal únicamente en el inicio */
+#screen-home .panel {
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Centrar el encabezado */
+#screen-home .panel-heading {
+  text-align: center;
+}
+
+/* Mostrar únicamente dos columnas y centrarlas */
+#screen-home .category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 540px;
+  margin: 0 auto;
+}
+
+/* Igualar el tamaño de ambas tarjetas */
+#screen-home .category-card {
+  width: 100%;
+  min-height: 255px;
+}
+
+/* Ajustes para dispositivos móviles */
+@media (max-width: 700px) {
+  #screen-home .panel {
+    max-width: 100%;
+  }
+
+  #screen-home .category-grid {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    gap: 12px;
+  }
+
+  #screen-home .category-card {
+    min-height: auto;
+  }
+}
+
   </style>
 </head>
 
