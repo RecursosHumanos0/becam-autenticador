@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -675,16 +676,6 @@
             </div>
             <span class="category-arrow" aria-hidden="true">›</span>
           </button>
-
-          <button class="category-card" type="button"
-            onclick="seleccionarCategoria('participantes')">
-            <div class="category-icon" aria-hidden="true">👥</div>
-            <div>
-              <h2>Participantes</h2>
-              <p>Consulta los registros individuales de capacitación.</p>
-            </div>
-            <span class="category-arrow" aria-hidden="true">›</span>
-          </button>
         </div>
       </div>
     </section>
@@ -858,25 +849,7 @@
     };
 
     // =========================================================
-    // 4. BASE DE DATOS: PARTICIPANTES
-    // Agrega aquí cada participante utilizando su folio.
-    // =========================================================
-
-    const participantes = {
-      /*
-      "CAP-PAR-001": {
-        nombre: "Nombre del participante",
-        empresa: "DocuPuebla S.A. de C.V.",
-        centro: "CEDIS-Reforma Puebla",
-        curso: "Comunicación asertiva",
-        periodo: "Octubre de 2026",
-        estatus: "Acreditado"
-      }
-      */
-    };
-
-    // =========================================================
-    // 5. CONFIGURACIÓN DE CATEGORÍAS
+    // 4. CONFIGURACIÓN DE CATEGORÍAS
     // =========================================================
 
     const configuracion = {
@@ -894,14 +867,6 @@
         icono: "🎓",
         placeholder: "Ej. AAA-AAA-000",
         ayuda: "Ingresa el folio asignado al ponente."
-      },
-
-      participantes: {
-        titulo: "Consulta de participantes",
-        descripcion: "Consulta la información asociada al registro de capacitación.",
-        icono: "👥",
-        placeholder: "Ej. AAA-AAA-000",
-        ayuda: "Ingresa el folio individual del participante."
       }
     };
 
@@ -910,7 +875,7 @@
     let fechaHoraConsulta = null;
 
     // =========================================================
-    // 6. CONTROL DE PANTALLAS
+    // 5. CONTROL DE PANTALLAS
     // =========================================================
 
     function mostrarPantalla(pantalla) {
@@ -967,7 +932,7 @@
     }
 
     // =========================================================
-    // 7. CONSULTA Y VALIDACIÓN DEL FOLIO
+    // 6. CONSULTA Y VALIDACIÓN DEL FOLIO
     // =========================================================
 
     function iniciarValidacion(event) {
@@ -1005,8 +970,7 @@
     function buscarRegistro(categoria, folio) {
       const bases = {
         empresas: empresas,
-        ponentes: ponentes,
-        participantes: participantes
+        ponentes: ponentes
       };
 
       const base = bases[categoria];
@@ -1017,7 +981,7 @@
     }
 
     // =========================================================
-    // 8. PRESENTACIÓN DEL RESULTADO
+    // 7. PRESENTACIÓN DEL RESULTADO
     // =========================================================
 
     function mostrarResultado(registro, folio) {
@@ -1087,8 +1051,6 @@
         renderizarEmpresa(contenido, registro);
       } else if (categoriaActual === "ponentes") {
         renderizarPonente(contenido, registro);
-      } else if (categoriaActual === "participantes") {
-        renderizarParticipante(contenido, registro);
       }
 
       mostrarPantalla("screen-result");
@@ -1097,15 +1059,14 @@
     function nombreCategoria(categoria) {
       const nombres = {
         empresas: "Empresas",
-        ponentes: "Ponentes",
-        participantes: "Participantes"
+        ponentes: "Ponentes"
       };
 
       return nombres[categoria] || "Registro";
     }
 
     // =========================================================
-    // 9. FUNCIONES PARA MOSTRAR DATOS
+    // 8. FUNCIONES PARA MOSTRAR DATOS
     // =========================================================
 
     function agregarCampo(contenedor, etiqueta, valor, completo) {
@@ -1190,20 +1151,6 @@
       agregarObservacion(
         contenedor,
         "Registro correspondiente a la participación del ponente en los programas de capacitación orientados al desarrollo de habilidades blandas y al fortalecimiento de las competencias profesionales de los colaboradores."
-      );
-    }
-
-    function renderizarParticipante(contenedor, registro) {
-      agregarCampo(contenedor, "Nombre del participante", registro.nombre, true);
-      agregarCampo(contenedor, "Empresa", registro.empresa);
-      agregarCampo(contenedor, "Centro de trabajo", registro.centro);
-      agregarCampo(contenedor, "Curso registrado", registro.curso);
-      agregarCampo(contenedor, "Periodo", registro.periodo);
-      agregarCampo(contenedor, "Estatus", registro.estatus);
-
-      agregarObservacion(
-        contenedor,
-        "Registro correspondiente a la participación en los programas de capacitación orientados al desarrollo de habilidades blandas, fortaleciendo los conocimientos y competencias para el desempeño laboral."
       );
     }
   </script>
